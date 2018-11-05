@@ -2,9 +2,8 @@
 #include"vector3.h"
 #include"lipid.h"
 
-extern parameters pars;
-
 void lipid::update(){
+    parameters& pars = getParameters();
     vector3 a = (FH + FM + FT) / (3 * pars.m);
 	v += a * pars.dt;
 	pos += v * pars.dt;
@@ -24,12 +23,15 @@ void lipid::update(){
 }
 
 int lipid::getX(){
+    parameters& pars = getParameters();
 	return int(pos.x / pars.r);
 }
 int lipid::getY(){
+    parameters& pars = getParameters();
 	return int(pos.y / pars.r);
 }
 int lipid::getZ(){
+    parameters& pars = getParameters();
 	return int(pos.z / pars.r);
 }
 
@@ -37,11 +39,13 @@ void calculateForces(lipid* l1, lipid* l2){
 }
 
 static vector3 frictionForce(vector3 v){
+    parameters& pars = getParameters();
 	return  - pars.friction * v * v.length();
 }
 
 void friction(lipid* l){
 	return;
+    parameters& pars = getParameters();
 	l->FM += frictionForce(l->v);
 	vector3 vAngle = l->angularV.crossProduct(l->direction) * pars.agentSize;
 	vector3 vH = l->v + vAngle;

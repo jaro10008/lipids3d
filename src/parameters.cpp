@@ -10,10 +10,15 @@
 
 using namespace std;
 
+static parameters pars;
+
+parameters& getParameters(){
+    return pars;
+}
+
 /*
-	unsigned int initialTabSize;
-	unsigned int steps;
 	unsigned int N;
+	unsigned int logTime;
 	long double r;
 	long double agentSize;
 	long double m;
@@ -45,7 +50,6 @@ bool parameters::saveParameters(const char* fileName){
 
 	fprintf(file, "# File generated automatically\n\n");
 
-	SAVE_PARAMETER(initialTabSize, "u");
 	SAVE_PARAMETER(N, "u");
 	SAVE_PARAMETER(logTime, "u");
 	SAVE_PARAMETER(r, "Lf");
@@ -77,7 +81,6 @@ static bool atob(const char* s){
 bool parameters::browseDictionary(map<string, string> dict){
 	string value;
 
-	LOAD_PARAMETER(initialTabSize, isInteger, atoi);
 	LOAD_PARAMETER(N, isInteger, atoi);
 	LOAD_PARAMETER(logTime, isInteger, atoi);
 	LOAD_PARAMETER(r, isDouble, atof);

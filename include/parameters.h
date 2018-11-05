@@ -5,7 +5,6 @@
 #include<string>
 
 struct parameters{
-	unsigned int initialTabSize;
 	unsigned int N;
 	unsigned int logTime;
 	long double r;
@@ -22,5 +21,7 @@ struct parameters{
     private:
     bool browseDictionary(std::map<std::string, std::string>);
 };
+
+parameters& getParameters();
 
 #endif

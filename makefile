@@ -1,20 +1,25 @@
+SRCDIR = ./src
+INCDIR = ./include
+OBJDIR = ./obj
 CC = g++
-CFLAGS = -O3 -fopenmp -Wall
-TARGET = simulator
+CFLAGS = -O3 -Wall -Wno-unused-result -I $(INCDIR) -fopenmp
+SIM_CFLAGS = 
+VIS_CFLAGS = -lGL -lglfw -lglut -lGLU
 RM = rm
 RMFLAGS = -rf
-SRCDIR = ./src
-SRCS = $(wildcard $(SRCDIR)/*.cpp)
-OBJDIR = ./obj
 
-OBJS = $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+SIM_OBJS = $(addprefix $(OBJDIR)/, simulator.o statefile.o volume.o povray.o lipid.o parameters.o utils.o vector3.o)
+VIS_OBJS = $(addprefix $(OBJDIR)/, visualizer.o controls.o drawing.o parameters.o statefile.o lipid.o volume.o utils.o vector3.o)
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: simulator visualizer
 
-$(TARGET):$(OBJS)
-	@$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+simulator:$(SIM_OBJS)
+	@$(CC) $(CFLAGS) -o simulator $(SIM_OBJS) $(SIM_CFLAGS)
+
+visualizer:$(VIS_OBJS)
+	@$(CC) $(CFLAGS) -o visualizer $(VIS_OBJS) $(VIS_CFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p ./obj
@@ -23,5 +28,5 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 
 
 clean:
-	@$(RM) $(RMFLAGS) $(OBJDIR) $(TARGET)
+	@$(RM) $(RMFLAGS) $(OBJDIR) ./simulator ./visualizer
 

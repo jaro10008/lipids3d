@@ -1,6 +1,8 @@
 #ifndef LIPID_H
 #define LIPID_H
 
+#include"vector3.h"
+
 struct lipid{
 	vector3 pos;
 	vector3 v;
