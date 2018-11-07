@@ -1,15 +1,20 @@
-initialTabSize = 4000
-N=4000
+N=1000
 logTime = 1
 r = 1.0
 agentSize = 1
 m = 0.3
 dt = +0.0001
-sizeX = 10.0
-sizeY = +8.0
-sizeZ = +4
-friction = -7.0
+sizeX = 40.0
+sizeY = +40.0
+sizeZ = +40
+friction = 7.0
 D = 1.0000000
-#jeszcze glupszy
-toroidal = T #glupi komentarz
+epsilonHH = 1.0
+rmHH = 2.0
+epsilonHT = 1.0
+rmHT = 2.0
+epsilonTT = 1.0
+rmTT = 2.0
+#komentarz
+toroidal = T #komentarz
 

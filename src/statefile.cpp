@@ -4,7 +4,7 @@
 #include "parameters.h"
 #include "volume.h"
 
-static const unsigned int version = 2;
+static const unsigned int version = 3;
 
 static void printTime(time_t t){
 	tm* timeInfo;

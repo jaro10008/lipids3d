@@ -15,6 +15,7 @@ void generatePovFile(const char* povFile){
 	vector3 lightPos = vector3(-pars.sizeX / 2,pars.sizeY / 2,1.5 * pars.sizeZ);
 	long double FoV = 70;
 
+    fprintf(pfile,"#include \"colors.inc\"\n");
 	fprintf(pfile,"camera {\n");
 	fprintf(pfile,"sky <%Lf,%Lf,%Lf>\n", nose.x, nose.y, nose.z);
 	fprintf(pfile,"location <%Lf,%Lf,%Lf>\n", camera.x, camera.y, camera.z);
@@ -23,7 +24,7 @@ void generatePovFile(const char* povFile){
 	fprintf(pfile,"}\n");
 	fprintf(pfile,"global_settings { ambient_light Black }\n");
 	fprintf(pfile,"light_source { <%Lf,%Lf,%Lf> color 2*White parallel point_at <0.0,0.0,0.0>}\n", lightPos.x, lightPos.y, lightPos.z);
-	fprintf(pfile,"background{color Pink}\n");
+	fprintf(pfile,"background{color Black}\n");
 
 	fprintf(pfile,"#macro L(tail, head)\n");
 	fprintf(pfile,"#local r = %Lf;\n", pars.agentSize);

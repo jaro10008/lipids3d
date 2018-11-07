@@ -10,6 +10,7 @@ static int sectorsX;
 static int sectorsY;
 static int sectorsZ;
 static unsigned int steps;
+static long double width;
 
 unsigned int getStepCount(){
     return steps;
@@ -131,16 +132,22 @@ void updateSectors(lipid* l){
 void initializeSimulation(bool initAgents = true){
     parameters& pars = getParameters();
 
-	sectorsX = int(pars.sizeX / pars.r) + 1;
-	sectorsY = int(pars.sizeY / pars.r) + 1;
-	sectorsZ = int(pars.sizeZ / pars.r) + 1;
+    width = pars.r + pars.agentSize;
 
-	pars.sizeX = sectorsX * pars.r;
-	pars.sizeY = sectorsY * pars.r;
-	pars.sizeZ = sectorsZ * pars.r;
+	sectorsX = int(pars.sizeX / width) + 1;
+	sectorsY = int(pars.sizeY / width) + 1;
+	sectorsZ = int(pars.sizeZ / width) + 1;
+
+	pars.sizeX = sectorsX * width;
+	pars.sizeY = sectorsY * width;
+	pars.sizeZ = sectorsZ * width;
 
     agents = new lipid[pars.N];
     sectors = new lipid*[sectorsX * sectorsY * sectorsZ];
+
+    for(int i = 0; i < sectorsX * sectorsY * sectorsZ; ++i){
+        sectors[i] = NULL;
+    }
 
     if(initAgents){
 
@@ -167,6 +174,9 @@ lipid& getAgentAt(int in){
     return agents[in];
 }
 
+long double getSectorWidth(){
+    return width;
+}
 
 
 

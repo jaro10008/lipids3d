@@ -65,7 +65,7 @@ int main(int argc, char** argv){
     int noOfAgents = pars.N;
 
 
-	//omp_set_num_threads(8);
+	omp_set_num_threads(1);
 
 	printf("\nNumber of threads: %i\n\n", omp_get_max_threads());
 
@@ -86,11 +86,10 @@ int main(int argc, char** argv){
 			int x = agent->getX();
 			int y = agent->getY();
 			int z = agent->getZ();
-		
 	
-			agent->FH = vector3(0.0, 0.0, 0.0);
-			agent->FM = vector3(0.0, 0.0, 0.0);
-			agent->FT = vector3(0.0, 0.0, 0.0);
+			agent->F[0] = vector3(0.0, 0.0, 0.0);
+			agent->F[1] = vector3(0.0, 0.0, 0.0);
+			agent->F[2] = vector3(0.0, 0.0, 0.0);
 			
 			for(int j = -1; j < 2; ++j)
 			for(int k = -1; k < 2; ++k)
@@ -104,7 +103,9 @@ int main(int argc, char** argv){
 							d = distanceInToroidalSpace(d, vector3(pars.sizeX, pars.sizeY, pars.sizeZ));
 						}
 
-						if(d.length2() <= pars.r * pars.r){
+                        long double width = pars.r + pars.agentSize;
+
+						if(d.length2() <= width * width){
 
 							calculateForces(agent, ptr);
 						}

@@ -16,5 +16,6 @@ void correctPosition(long double&, long double&, long double&);
 lipid* getFirstInSector(int, int, int);
 void setFirstInSector(int, int, int, lipid*);
 void updateSectors(lipid*);
+long double getSectorWidth();
 
 #endif //VOLUME_H

@@ -26,6 +26,12 @@ parameters& getParameters(){
 	long double sizeX, sizeY, sizeZ;
 	long double friction;
 	long double D;
+    long double epsilonHH;
+    long double rmHH;
+    long double epsilonHT;
+    long double rmHT;
+    long double epsilonTT;
+    long double rmTT;
 	bool toroidal;
 */
 
@@ -61,7 +67,14 @@ bool parameters::saveParameters(const char* fileName){
 	SAVE_PARAMETER(sizeZ, "Lf");
 	SAVE_PARAMETER(friction, "Lf");
 	SAVE_PARAMETER(D, "Lf");
-	
+	SAVE_PARAMETER(epsilonHH, "Lf");
+	SAVE_PARAMETER(rmHH, "Lf");	
+	SAVE_PARAMETER(epsilonHT, "Lf");
+	SAVE_PARAMETER(rmHT, "Lf");	
+	SAVE_PARAMETER(epsilonTT, "Lf");
+	SAVE_PARAMETER(rmTT, "Lf");	
+
+
 	char toroidal;
 	if(this->toroidal)
 		toroidal = 'T';
@@ -92,6 +105,12 @@ bool parameters::browseDictionary(map<string, string> dict){
 	LOAD_PARAMETER(sizeZ, isDouble, atof);
 	LOAD_PARAMETER(friction, isDouble, atof);
 	LOAD_PARAMETER(D, isDouble, atof);
+	LOAD_PARAMETER(epsilonHH, isDouble, atof);
+	LOAD_PARAMETER(rmHH, isDouble, atof);
+	LOAD_PARAMETER(epsilonHT, isDouble, atof);
+	LOAD_PARAMETER(rmHT, isDouble, atof);
+	LOAD_PARAMETER(epsilonTT, isDouble, atof);
+	LOAD_PARAMETER(rmTT, isDouble, atof);
 	LOAD_PARAMETER(toroidal, isBoolean, atob);
 
 	return true;

@@ -6,7 +6,7 @@
 struct lipid{
 	vector3 pos;
 	vector3 v;
-	vector3 FH, FM, FT;
+	vector3 F[3]; //0 - head, 1 - middle, 2 - tail
 
 	vector3 direction;
 	vector3 angularV;

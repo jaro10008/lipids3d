@@ -14,6 +14,12 @@ struct parameters{
 	long double sizeX, sizeY, sizeZ;
 	long double friction;
 	long double D;
+    long double epsilonHH;
+    long double rmHH;
+    long double epsilonHT;
+    long double rmHT;
+    long double epsilonTT;
+    long double rmTT;
 	bool toroidal;
 
 	bool readParametersFromFile(const char*);
