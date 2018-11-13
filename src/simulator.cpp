@@ -65,7 +65,7 @@ int main(int argc, char** argv){
     int noOfAgents = pars.N;
 
 
-	omp_set_num_threads(1);
+	//omp_set_num_threads(1);
 
 	printf("\nNumber of threads: %i\n\n", omp_get_max_threads());
 

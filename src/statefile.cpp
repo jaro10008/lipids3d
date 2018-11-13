@@ -126,6 +126,9 @@ bool readRawInfo(const char* inFile, parameters* pars, lipid** tab){
     FILE* file = fopen(inFile, "rb");
 		puts("Loading simulation state...");
 		
+        if(!file)
+            return false;
+
 		int vers;
 		(void)fread((void*) &vers, sizeof(vers), 1, file);
 		if(vers != version){

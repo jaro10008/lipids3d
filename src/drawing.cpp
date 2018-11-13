@@ -14,42 +14,45 @@
 
 using namespace glm;
 
-struct Molecule {
-	vec3 position;
-	vec3 orientation;
-};
-
+static Molecule* tab;
 static unsigned int n;
-static Molecule* tab = NULL;
 static double agentSize;
 static GLUquadric* quadratic;
 
-bool readFile(const char* fileName) {
+void setMoleculeData(MoleculeData nData){
+    tab = nData.tab;
+    n = nData.n;
+    agentSize = nData.agentSize;
+}
+
+MoleculeData readFile(const char* fileName) {
 	parameters pars;
     lipid* temp = NULL;    
 
+    MoleculeData nData;
+    nData.tab = NULL;
+
     if(!readRawInfo(fileName, &pars, &temp))
     {
-        return false;
+        return nData;
     }
 
-    n = pars.N;
-    agentSize = pars.agentSize;
+    nData.n = pars.N;
+    nData.agentSize = pars.agentSize;
 
-    if(tab == NULL)
-        tab = new Molecule[n];
+    nData.tab = new Molecule[nData.n];
 
-    for(unsigned int i = 0; i < n; ++i){
-        tab[i].position.x = (float) temp[i].pos.x;
-        tab[i].position.y = (float) temp[i].pos.y;
-        tab[i].position.z = (float) temp[i].pos.z;
+    for(unsigned int i = 0; i < nData.n; ++i){
+        nData.tab[i].position.x = (float) temp[i].pos.x;
+        nData.tab[i].position.y = (float) temp[i].pos.y;
+        nData.tab[i].position.z = (float) temp[i].pos.z;
 
-        tab[i].orientation.x = (float) temp[i].direction.x;
-        tab[i].orientation.y = (float) temp[i].direction.y;
-        tab[i].orientation.z = (float) temp[i].direction.z;
+        nData.tab[i].orientation.x = (float) temp[i].direction.x;
+        nData.tab[i].orientation.y = (float) temp[i].direction.y;
+        nData.tab[i].orientation.z = (float) temp[i].direction.z;
     }
 
-	return true;
+	return nData;
 }
 
 

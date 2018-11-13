@@ -6,6 +6,13 @@
 #include "drawing.h"
 #include <GL/glut.h>
 #include <GL/glu.h>
+#include <dirent.h>
+#include <limits>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
 
 static void error_callback(int error, const char* description)
 {
@@ -25,13 +32,72 @@ int main(int argc, char** argv)
 		fprintf(stderr, "ERROR: File name not given\n");
 		return 1;
 	}
+    if(argc < 3){
+        fprintf(stderr, "ERROR: Undefined number of FPS\n");
+        return 1;
+    }
+
+	
+	const float fov = 60.0f;
+    double fps = atof(argv[2]);
+    double tbf;//time between files
+
+    if(fps == 0.0)
+        tbf = std::numeric_limits<double>::infinity();
+    else
+        tbf = 1 / fps;
+
+    DIR *dir;
+    if((dir = opendir(argv[1]))==NULL){
+        fprintf(stderr, "ERROR: Can't open the directory given: %s\n", argv[1]);
+        return 1;
+    }
+
+    vector<string> sortVector;
+
+    struct dirent *ent;
+
+    while((ent = readdir (dir)) != NULL){
+        if(ent->d_name[0] == '.')
+            continue;
+
+        char buffer[522];
+        sprintf(buffer, "%s/%s", argv[1], ent->d_name);
+        sortVector.push_back(string(buffer));
+    }
+
+    if(sortVector.empty()){
+        fprintf(stderr, "ERROR: No files found\n");
+        return 1;
+    }
+
+    sort(sortVector.begin(), sortVector.end());
+
+
+
+    vector<MoleculeData> frames;
+
+    for(unsigned int i = 0; i < sortVector.size(); ++i){
+        MoleculeData res = readFile(sortVector[i].c_str());
+	    if(res.tab == NULL){
+            fprintf(stderr, "ERROR: Can't load simulation state: %s\n", sortVector[i].c_str());
+            continue;
+        }
+        frames.push_back(res);
+    }
+
+    if(frames.empty()){
+        fprintf(stderr, "ERROR: No proper files found\n");
+        return 1;
+    }
+
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
 
     glutInit(&argc, argv);
 
-	window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+	window = glfwCreateWindow(640, 480, "Lipids 3D", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -39,10 +105,7 @@ int main(int argc, char** argv)
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
-	
-	const float fov = 60.0f;
 
-	readFile(argv[1]);
 
     glEnable(GL_LIGHTING) ;
     glEnable(GL_LIGHT0);
@@ -58,6 +121,10 @@ int main(int argc, char** argv)
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+
+    double lastTime = glfwGetTime() - tbf;
+
+    unsigned int ptr = 0;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -83,6 +150,16 @@ int main(int argc, char** argv)
         glLightfv(GL_LIGHT0, GL_POSITION, light_position);
         glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+
+        double currentTime = glfwGetTime();
+	    double deltaTime = currentTime - lastTime;
+        if(deltaTime > tbf){
+            if(ptr < frames.size()){
+                setMoleculeData(frames[ptr]);
+	            ++ptr;
+            }
+            lastTime = currentTime;
+        }
 
 		/*
 		glBegin(GL_TRIANGLES);
