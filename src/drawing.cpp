@@ -19,21 +19,20 @@ static unsigned int n;
 static double agentSize;
 static GLUquadric* quadratic;
 
-void setMoleculeData(MoleculeData nData){
+void setMoleculeData(MoleculeData nData) {
     tab = nData.tab;
     n = nData.n;
     agentSize = nData.agentSize;
 }
 
 MoleculeData readFile(const char* fileName) {
-	parameters pars;
-    lipid* temp = NULL;    
+    parameters pars;
+    lipid* temp = NULL;
 
     MoleculeData nData;
     nData.tab = NULL;
 
-    if(!readRawInfo(fileName, &pars, &temp))
-    {
+    if (!readRawInfo(fileName, &pars, &temp)) {
         return nData;
     }
 
@@ -42,7 +41,7 @@ MoleculeData readFile(const char* fileName) {
 
     nData.tab = new Molecule[nData.n];
 
-    for(unsigned int i = 0; i < nData.n; ++i){
+    for (unsigned int i = 0; i < nData.n; ++i) {
         nData.tab[i].position.x = (float) temp[i].pos.x;
         nData.tab[i].position.y = (float) temp[i].pos.y;
         nData.tab[i].position.z = (float) temp[i].pos.z;
@@ -52,18 +51,28 @@ MoleculeData readFile(const char* fileName) {
         nData.tab[i].orientation.z = (float) temp[i].direction.z;
     }
 
-	return nData;
+    return nData;
 }
 
-
-static void drawSphere(vec3 position, float radius){
+/**
+ * Draws a sphere.
+ * @param position Center of the sphere.
+ * @param radius Radius of the sphere.
+ */
+static void drawSphere(vec3 position, float radius) {
     glPushMatrix();
     glTranslatef(position.x, position.y, position.z);
     glutSolidSphere((GLdouble) radius, 25, 25);
     glPopMatrix();
 }
 
-static void drawCylinder(vec3 tail, vec3 head, float radius){
+/**
+ * Draws a cylinder.
+ * @param tail Center of the first base.
+ * @param head Center of the second base.
+ * @param radius Radius of the bases.
+ */
+static void drawCylinder(vec3 tail, vec3 head, float radius) {
     vec3 diff = head - tail;
     float l = length(diff);
     diff = normalize(diff);
@@ -73,31 +82,31 @@ static void drawCylinder(vec3 tail, vec3 head, float radius){
     float angle = 180.0 * acos(diff.z) / M_PI;
 
 
-    if(angle > 0.0f){
+    if (angle > 0.0f) {
         vec3 rotVec(-diff.y, diff.x, 0.0f);
         rotVec = normalize(rotVec);
-        glRotatef(angle,rotVec.x, rotVec.y, 0.0f);
+        glRotatef(angle, rotVec.x, rotVec.y, 0.0f);
     }
-    gluCylinder(quadratic, radius,radius,l,25,1);
+    gluCylinder(quadratic, radius, radius, l, 25, 1);
     glPopMatrix();
 }
 
-static const GLfloat red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-static const GLfloat white[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+static const GLfloat red[] = {1.0f, 0.0f, 0.0f, 1.0f};
+static const GLfloat white[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 static void drawMolecule(Molecule& m) {
-    vec3 diff = m.orientation * (float)agentSize;
+    vec3 diff = m.orientation * (float) agentSize;
     glMaterialfv(GL_FRONT, GL_DIFFUSE, red);
-    drawSphere(m.position + diff, 0.4f * (float)agentSize);
+    drawSphere(m.position + diff, 0.4f * (float) agentSize);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, white);
-    drawCylinder(m.position - diff, m.position + diff, 0.2f * (float)agentSize);
-    drawSphere(m.position - diff, 0.2f * (float)agentSize);
+    drawCylinder(m.position - diff, m.position + diff, 0.2f * (float) agentSize);
+    drawSphere(m.position - diff, 0.2f * (float) agentSize);
 
 }
 
 void drawMolecules() {
     quadratic = gluNewQuadric();
-	for (unsigned int i = 0; i < n; ++i)
-		drawMolecule(tab[i]);
+    for (unsigned int i = 0; i < n; ++i)
+        drawMolecule(tab[i]);
     gluDeleteQuadric(quadratic);
 }
