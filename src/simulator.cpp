@@ -69,13 +69,15 @@ int main(int argc, char** argv){
 
 	printf("\nNumber of threads: %i\n\n", omp_get_max_threads());
 
-	for(; getStepCount() < maxSteps; incrementStepCount()){
+    
+    char fileName[128];
+	sprintf(fileName, "%s/step_%09d.bin", argv[3], getStepCount());
+	saveSimDataToFile(fileName);
+    incrementStepCount();
+
+	for(; getStepCount() <= maxSteps; incrementStepCount()){
 		if(getStepCount() % pars.logTime == 0){
 			printf("Computing step %d\n", getStepCount());
-			char fileName[128];
-			sprintf(fileName, "%s/step_%09d.bin", argv[3], getStepCount());
-			saveSimDataToFile(fileName);
-			//printf("%f %f %f\n", (float)agents[0]->pos.x,  (float)agents[0]->pos.y,  (float)agents[0]->pos.z);
 		}
 
 		#pragma omp parallel for
@@ -125,6 +127,11 @@ int main(int argc, char** argv){
 		}
 		for(int i = 0; i < noOfAgents; ++i)
 			updateSectors(&(getAgentAt(i)));
+
+        if(getStepCount() % pars.logTime == 0){
+			sprintf(fileName, "%s/step_%09d.bin", argv[3], getStepCount());
+			saveSimDataToFile(fileName);
+        }
 
 	}
 

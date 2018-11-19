@@ -153,7 +153,7 @@ int main(int argc, char** argv)
 
         double currentTime = glfwGetTime();
 	    double deltaTime = currentTime - lastTime;
-        if(deltaTime > tbf){
+        if(deltaTime > tbf || !ptr){
             if(ptr < frames.size()){
                 setMoleculeData(frames[ptr]);
 	            ++ptr;
