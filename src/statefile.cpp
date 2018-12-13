@@ -1,5 +1,6 @@
 #include<ctime>
 #include<cstdio>
+#include<cstdlib>
 
 #include "parameters.h"
 #include "volume.h"
@@ -103,7 +104,6 @@ void extractParameters(const char* inFile, const char* parFile) {
     if (vers != version) {
         fprintf(stderr, "File version incorrect!\nFile format version: %i\nCurrent version: %i\n", vers, version);
         exit(1);
-        ;
     } else
         printf("File format version: %i\n", version);
     time_t curr;

@@ -1,6 +1,8 @@
 #ifndef LIPID_H
 #define LIPID_H
 
+#include<cstddef>
+
 #include"vector3.h"
 
 /**
