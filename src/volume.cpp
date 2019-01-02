@@ -24,21 +24,29 @@ void incrementStepCount() {
     ++steps;
 }
 
+static int correctIndex(int in, int maxIn){
+	bool neg = false;
+
+	if(in < 0){
+		neg = true;
+		in = - in;
+	}
+
+	in %= maxIn;
+
+	if(neg && in){
+		in = maxIn - in;	
+	}
+
+	return in;
+}
+
 int getSectorIndex(int x, int y, int z) {
     parameters& pars = getParameters();
     if (pars.toroidal) {
-        if (x < 0)
-            x += sectorsX;
-        else if (x >= sectorsX)
-            x -= sectorsX;
-        if (y < 0)
-            y += sectorsY;
-        else if (y >= sectorsY)
-            y -= sectorsY;
-        if (z < 0)
-            z += sectorsZ;
-        else if (z >= sectorsZ)
-            z -= sectorsZ;
+        x = correctIndex(x, sectorsX);
+	y = correctIndex(y, sectorsY);
+	z = correctIndex(z, sectorsZ);
     } else {
         if (x < 0 || x >= sectorsX)
             return -1;
